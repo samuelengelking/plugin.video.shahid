@@ -71,7 +71,7 @@ def play_video(plugin, streamId, **kwargs):
                         'SHAHID_OS': 'LINUX',
                         'BROWSER_VERSION': '79.0'
                       }
-            Response = urlquick.get(requrl, params=params, headers=headers).json()
+            Response = urlquick.get(DRM_URL, params=params, headers=headers).json()
             licenceurl = Response['signature']
             authority = 'shahiddotnet.keydelivery.westeurope.media.azure.net'
             LICENSE_TEMP = '%s|authority=%s&origin=%s&User-Agent=%s&referer=%s|R{SSM}|'
