@@ -64,14 +64,15 @@ def play_video(plugin, streamId, **kwargs):
     if drm and 'm3u8' not in video_url:
         is_helper = inputstreamhelper.Helper('ism', drm='com.widevine.alpha')
         if is_helper.check_inputstream():
-            params =  get_filter(requesttype='request', assetId=streamId)
-            headers = {
-                        'User-Agent': USER_AGENT,
-                        'BROWSER_NAME': 'CHROME',
-                        'SHAHID_OS': 'LINUX',
-                        'BROWSER_VERSION': '79.0'
-                      }
-            Response = urlquick.get(DRM_URL, params=params, headers=headers).json()
+            # AFTER (fixed — reuse proper auth headers):
+            params = get_filter(requesttype='request', assetId=streamId)
+            drm_headers = get_headers()
+            drm_headers.update({
+                'BROWSER_NAME': 'CHROME',
+                'SHAHID_OS': 'LINUX',
+                'BROWSER_VERSION': '79.0'
+            })
+            Response = urlquick.get(DRM_URL, params=params, headers=drm_headers).json()
             licenceurl = Response['signature']
             authority = 'shahiddotnet.keydelivery.westeurope.media.azure.net'
             LICENSE_TEMP = '%s|authority=%s&origin=%s&User-Agent=%s&referer=%s|R{SSM}|'
